@@ -1,0 +1,27 @@
+#!/usr/bin/python
+
+import twitter
+from time import sleep
+
+TIMEOUT_BETWEEN_TWEETS = 5
+tweets = twitter.Api().GetPublicTimeline()    
+
+def refresh_timeline():
+    global tweets
+    tweets = twitter.Api().GetPublicTimeline()    
+
+def get_next_tweet():
+    if not tweets:
+        refresh_timeline()
+    return tweets.pop()
+        
+def print_tweet():
+    tweet = get_next_tweet()
+    print tweet.user.name + ':', tweet.text
+
+def main():
+    while True:
+        print_tweet()
+        sleep(TIMEOUT_BETWEEN_TWEETS)
+        
+main()
